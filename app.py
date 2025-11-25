@@ -15,7 +15,7 @@ st.markdown("""
     <style>
       header, footer {visibility: hidden;}
       .stButton>button {background-color: #4CAF50; color: white; font-size:18px; height:3em;}
-  .stSlider>div[data-baseweb~="slider"] {margin-bottom:1.5em;}
+      .stSlider>div[data-baseweb~="slider"] {margin-bottom:1.5em;}
     </style>
 """, unsafe_allow_html=True)
 
@@ -25,7 +25,8 @@ DATA_PATH = ROOT / "data" / "cleaned_survey.csv"
 RES_PATH  = ROOT / "resources.json"
 
 df        = pd.read_csv(DATA_PATH)
-@@ -29,46 +30,65 @@
+# ← specify UTF-8 here so Windows can read all characters
+resources = json.loads(RES_PATH.read_text(encoding='utf-8'))
 
 # ─── Sidebar Pie Chart ───────────────────────────────────────────────────────────
 dist = df['RiskLevel'].value_counts().reset_index()
@@ -91,7 +92,17 @@ if remote_wk == "Yes":
 
 if score == 0:
     risk = "Low"
-@@ -86,29 +106,36 @@
+elif score <= 2:
+    risk = "Moderate"
+else:
+    risk = "High"
+
+# ─── Display Results with Effects ────────────────────────────────────────────────
+if st.button("🔍 Assess My Risk"):
+    if risk == "Low":
+        st.snow()
+    elif risk == "Moderate":
+        st.balloons()
     else:
         st.warning("⚠️ High risk detected. Please consider reaching out for professional support.")
 
@@ -128,7 +139,14 @@ Mental health refers to our emotional, psychological, and social well-being.
 It affects how we think, feel, and act in daily life, and influences how we handle stress, relate to others, and make choices.
     """)
 elif topic == "Why Is Mental Health Important?":
-@@ -123,13 +150,14 @@
+    st.write("""
+Good mental health is foundational to overall health and quality of life.  
+It improves our ability to cope with stress, build strong relationships, stay productive at work, and enjoy life’s moments.
+    """)
+elif topic == "Signs of Poor Mental Health":
+    st.write("""
+- Persistent feelings of sadness or hopelessness  
+- Loss of interest in activities once enjoyed  
 - Changes in sleeping or eating habits  
 - Difficulty concentrating or making decisions  
 - Increased irritability, anger, or worry  
@@ -143,3 +161,13 @@ elif topic == "Tips for Self-Care":
 - Stay connected: call a friend or family member  
 - Journaling: express your thoughts on paper  
 - Set small, achievable daily goals  
+    """)
+elif topic == "Where to Find Help":
+    st.write("""
+- **Therapy**: PsychologyToday.com to find local counselors  
+- **Hotlines (US):**  
+  - 988 Suicide & Crisis Lifeline  
+  - Text HOME to 741741 (Crisis Text Line)  
+- **Apps:** Headspace, Calm, Moodfit  
+- **Employee Assistance Programs:** check your workplace benefits  
+    """)
